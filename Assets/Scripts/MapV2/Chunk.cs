@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Chunk 
 {
@@ -10,7 +11,6 @@ public class Chunk
     private MeshRenderer meshRenderer;
 	private MeshFilter meshFilter;
 	private MeshCollider _meshCollider;
-	
 	private int _vertexIndex = 0;
 	
 	private readonly List<Vector3> _vertices = new List<Vector3> ();
@@ -56,11 +56,9 @@ public class Chunk
 	    meshRenderer = chunkObject.AddComponent<MeshRenderer>();
 	    meshRenderer.material = this._world.material;
 	    _meshCollider = chunkObject.AddComponent<MeshCollider>();
-        
 	    chunkObject.transform.SetParent(this._world.transform);
 	    chunkObject.transform.position = new Vector3(coord.x * VoxelData.k_ChunkWidth, 0f, coord.z * VoxelData.k_ChunkWidth);
 	    chunkObject.name = "Chunk " + coord.x + ", " + coord.z;
-
 
 	    PopulateVoxelMap();
 	    CreateMeshData();

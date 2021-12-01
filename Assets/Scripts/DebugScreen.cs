@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DebugScreen : MonoBehaviour {
-
+public class DebugScreen : MonoBehaviour 
+{
     [SerializeField] private World world;
     [SerializeField] private Text text;
 
@@ -13,15 +13,16 @@ public class DebugScreen : MonoBehaviour {
     private int _halfWorldSizeInVoxels;
     private int _halfWorldSizeInChunks;
 
-    private void Start() {
+    private void Start() 
+    {
         text = GetComponent<Text>();
 
         _halfWorldSizeInVoxels = VoxelData.WorldSizeInVoxels / 2;
         _halfWorldSizeInChunks = VoxelData.k_WorldSizeInChunks / 2;
     }
 
-    private void Update() {
-
+    private void Update() 
+    {
         var debugText = "Debug Screen\n";
         debugText += _frameRate + " fps\n\n";
         debugText += "x : " + (Mathf.FloorToInt(world.GetPlayer().transform.position.x) - _halfWorldSizeInVoxels + "\n");
@@ -31,13 +32,15 @@ public class DebugScreen : MonoBehaviour {
 
         text.text = debugText;
 
-        if (_timer > 1f) {
-
+        if (_timer > 1f) 
+        {
             _frameRate = (int)(1f / Time.unscaledDeltaTime);
             _timer = 0;
 
-        } else
+        }
+        else
+        {
             _timer += Time.deltaTime;
-
+        }
     }
 }

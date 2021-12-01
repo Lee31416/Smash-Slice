@@ -19,18 +19,17 @@ public class PlayerMovement : MonoBehaviour
     private bool _isGrounded;
     private bool _isRunning;
     private bool _isMoving;
-    private Animator _animator;
+    public Animator _animator { get; private set; }
     private bool _isAttacking;
 
-    // Start is called before the first frame update
     private void Start()
     {
         _animator = GetComponentInChildren<Animator>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
+        _isGrounded = _controller.isGrounded;
         _animator.SetBool("IsRunning", _isRunning);
         _animator.SetBool("IsMoving", _isMoving);
         
@@ -49,13 +48,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!Input.GetMouseButtonDown(0) || _isAttacking) return;
         _isAttacking = true;
-        //StartCoroutine(Punch1());
+        StartCoroutine(Attack1());
     }
 
-    private IEnumerator Punch1()
+    private IEnumerator Attack1()
     {
         _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 1);
-        _animator.SetTrigger("Punch1");
+        _animator.SetTrigger("Attack");
         yield return new WaitForSeconds(0.9f);
         _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 0);
         _isAttacking = false;
@@ -74,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_isGrounded)
         {
-            _verticalVelocity = _gravityForce * Time.fixedDeltaTime;
+            /*_verticalVelocity = _gravityForce * Time.fixedDeltaTime;*/
             HandleJump();
         }
         else
@@ -121,6 +120,6 @@ public class PlayerMovement : MonoBehaviour
         _verticalVelocity = _jumpForce;
         var direction = new Vector3(0f, _jumpForce, 0f).normalized;
             
-        // _controller.Move(direction * _speed * Time.deltaTime);
+        _controller.Move(direction * _speed * Time.deltaTime);
     }
 }
