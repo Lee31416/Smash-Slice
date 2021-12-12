@@ -6,7 +6,7 @@ public static class VoxelData
 {
 	public const int k_ChunkWidth = 16;
 	public const int k_ChunkHeight = 128;
-	public const int k_WorldSizeInChunks = 100;
+	public const int k_WorldSizeInChunks = 20;
 	public const int k_ViewDistanceInChunks = 5;
 	public const int k_TextureAtlasSizeInBlocks = 4;
 	public static float NormalizedBlockTextureSize => 1f / k_TextureAtlasSizeInBlocks;

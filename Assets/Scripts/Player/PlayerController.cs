@@ -30,15 +30,29 @@ public class PlayerController : MonoBehaviour
             PickItem();
         }
         
+        if (Input.GetKeyDown(KeyCode.Q) && _hasWeapon)
+        {
+            DropItem();
+        }
+        
         if (Input.GetKeyDown(KeyCode.F3))
         {
             _debugScreen.SetActive(!_debugScreen.activeSelf);
         }
     }
 
+    private void DropItem()
+    {
+        _equippedWeapon.transform.parent = null;
+        _equippedWeapon.GetComponent<Rigidbody>().isKinematic = false;
+        _equippedWeapon.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * 10);
+
+        _equippedWeapon = null;
+    }
+
     private void PickItem()
     {
-        var pickableItems = Physics.OverlapSphere(transform.position, _pickupRange, _itemLayer);
+        var pickableItems = Physics.OverlapBox(transform.position, new Vector3(_pickupRange, _pickupRange, _pickupRange), Quaternion.identity, _itemLayer);
         foreach (var item in pickableItems)
         {
             var pickedItem = item.gameObject;
@@ -58,7 +72,7 @@ public class PlayerController : MonoBehaviour
     
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _pickupRange);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(transform.position, new Vector3(_pickupRange, 2, _pickupRange));
     }
 }

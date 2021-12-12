@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class World : MonoBehaviour {
 
@@ -20,6 +23,9 @@ public class World : MonoBehaviour {
     private ChunkCoord _playerLastChunkCoord;
     private bool _isCreatingChunks;
     private List<ChunkCoord> _chunksToCreate = new List<ChunkCoord>();
+    
+    private BoxCollider _worldCollider;
+    
 
     private void Awake() 
     {
@@ -28,6 +34,11 @@ public class World : MonoBehaviour {
         spawnPosition = new Vector3((VoxelData.k_WorldSizeInChunks * VoxelData.k_ChunkWidth) / 2f, VoxelData.k_ChunkHeight + 2f, (VoxelData.k_WorldSizeInChunks * VoxelData.k_ChunkWidth) / 2f);
         GenerateWorld();
         _playerLastChunkCoord = GetChunkCoordFromVector3(player.position);
+
+        _worldCollider = gameObject.AddComponent<BoxCollider>();
+        _worldCollider.size = new Vector3((VoxelData.k_ChunkWidth * VoxelData.k_WorldSizeInChunks) - 16, 120, (VoxelData.k_ChunkWidth * VoxelData.k_WorldSizeInChunks) - 16);
+        _worldCollider.center = new Vector3((VoxelData.k_ChunkWidth * VoxelData.k_WorldSizeInChunks) / 2, 60, (VoxelData.k_ChunkWidth * VoxelData.k_WorldSizeInChunks) / 2);
+        _worldCollider.isTrigger = true;
     }
 
     public Transform GetPlayer()
@@ -54,6 +65,7 @@ public class World : MonoBehaviour {
         {
             StartCoroutine(CreateChunks());
         }
+        
     }
 
     private void GenerateWorld () {
@@ -91,7 +103,8 @@ public class World : MonoBehaviour {
         return new ChunkCoord(x, z);
     }
 
-    private void CheckViewDistance () {
+    private void CheckViewDistance() 
+    {
 
         var coord = GetChunkCoordFromVector3(player.position);
         _playerLastChunkCoord = _playerChunkCoord;
@@ -103,7 +116,7 @@ public class World : MonoBehaviour {
             for (var z = coord.z - VoxelData.k_ViewDistanceInChunks; z < coord.z + VoxelData.k_ViewDistanceInChunks; z++) 
             {
                 // If the current chunk is in the world...
-                if (IsChunkInWorld (new ChunkCoord (x, z))) 
+                if (IsChunkInWorld(new ChunkCoord (x, z))) 
                 {
                     // Check if it active, if not, activate it.
                     if (chunks[x, z] == null)
@@ -130,6 +143,8 @@ public class World : MonoBehaviour {
             }
         }
 
+
+        
         // Any chunks left in the previousActiveChunks list are no longer in the player's view distance, so loop through and disable them.
         foreach (var c in previouslyActiveChunks)
             chunks[c.x, c.z].IsActive = false;
@@ -189,13 +204,10 @@ public class World : MonoBehaviour {
             if (yPos <= lode.minHeight || yPos >= lode.maxHeight) continue;
             if (Noise.Get3DPerlin(pos, lode.noiseOffset, lode.scale, lode.threshold))
                 voxelValue = lode.blockID;
-
         }
 
         return voxelValue;
     }
-
-
 
     private bool IsChunkInWorld(ChunkCoord coord)
     {
@@ -205,6 +217,14 @@ public class World : MonoBehaviour {
     private bool IsVoxelInWorld(Vector3 pos)
     {
         return pos.x >= 0 && pos.x < VoxelData.WorldSizeInVoxels && pos.y >= 0 && pos.y < VoxelData.k_ChunkHeight && pos.z >= 0 && pos.z < VoxelData.WorldSizeInVoxels;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<CharacterController>() != null)
+        {
+            other.transform.Translate(Vector3.forward * -5);
+        }
     }
 }
 

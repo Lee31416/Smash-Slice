@@ -42,7 +42,7 @@ public class Chunk
 	    coord = _coord;
 	    this._world = _world;
 	    _isActive = true;
-
+	    
 	    if (generateOnLoad)
 	    {
 		    Init();
