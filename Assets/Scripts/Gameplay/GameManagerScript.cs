@@ -65,7 +65,6 @@ namespace Gameplay
             _isSpawningEnnemies = false;
     
             var rdmNumber = Random.Range(0, 100);
-            print(rdmNumber);
             if (rdmNumber > _enemySpawnChance) yield break;
     
             var playerX = _player.transform.position.x;
@@ -77,7 +76,6 @@ namespace Gameplay
             playerZ += _enemySpawnRange / 2;
             
             var spawnPos = new Vector3(playerX - randomX, 80, playerZ - randomZ);
-            print(spawnPos);
     
             var enemy = Instantiate(ennemyPrefab, spawnPos, Quaternion.identity);
             enemies.Add(enemy);

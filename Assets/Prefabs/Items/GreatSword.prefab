@@ -94,8 +94,8 @@ GameObject:
   - component: {fileID: 5185863779551127727}
   - component: {fileID: 5735232681012012110}
   m_Layer: 6
-  m_Name: GreatSwordRed
-  m_TagString: Untagged
+  m_Name: GreatSword
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 6415456056942540512}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 9186913230647224448}
   m_Father: {fileID: 0}

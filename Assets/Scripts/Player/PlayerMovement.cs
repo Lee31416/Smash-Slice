@@ -6,6 +6,7 @@ namespace Player
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] private CharacterController _controller;
+        [SerializeField] private PlayerController _playerCtrl;
         [SerializeField] private float _gravityForce = 14f;
         [SerializeField] private float _jumpForce = 25f;
         [SerializeField] private float _speed = 6f;
@@ -17,7 +18,7 @@ namespace Player
         private bool _isRunning;
         private bool _isMoving;
         public Animator _animator { get; private set; }
-        private bool _isAttacking;
+        public bool _isAttacking { get; private set; }
     
         private void Awake()
         {
@@ -30,10 +31,14 @@ namespace Player
             _isGrounded = _controller.isGrounded;
             _animator.SetBool("IsRunning", _isRunning);
             _animator.SetBool("IsMoving", _isMoving);
-            
+            _animator.SetBool("IsGrounded", _isGrounded);
+            _animator.SetFloat("AirVelocity", _verticalVelocity);
+
+            if (_isGrounded) _verticalVelocity = 0;
             HandleAttack();
+            HandleKick();
         }
-    
+
         private void FixedUpdate()
         {
             HandleJumpWithGravity();
@@ -45,16 +50,61 @@ namespace Player
         {
             if (!Input.GetMouseButtonDown(0) || _isAttacking) return;
             _isAttacking = true;
-            StartCoroutine(Attack1());
+            _playerCtrl._rightHand.GetComponent<SphereCollider>().enabled = true;
+            StartCoroutine(Attack());
+           
+        }
+        
+        private void HandleKick()
+        {
+            if (!Input.GetKeyDown(KeyCode.F) || _isAttacking) return;
+            _isAttacking = true;
+            _playerCtrl._rightFoot.GetComponent<CapsuleCollider>().enabled = true;
+            StartCoroutine(Kick());
         }
     
-        private IEnumerator Attack1()
+        private IEnumerator Attack()
         {
-            _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 1);
-            _animator.SetTrigger("Attack");
-            yield return new WaitForSeconds(0.9f);
-            _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 0);
-            _isAttacking = false;
+            if (_playerCtrl._hasWeapon)
+            {
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 1);
+                _animator.SetTrigger("Attack");
+                yield return new WaitForSeconds(0.9f);
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 0);
+                _isAttacking = false;
+            }
+            else
+            {
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 1);
+                _animator.SetTrigger("Punch");
+                yield return new WaitForSeconds(0.9f);
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 0);
+                _isAttacking = false;
+            }
+            
+            _playerCtrl._rightHand.GetComponent<SphereCollider>().enabled = false;
+        }
+        
+        private IEnumerator Kick()
+        {
+            if (_playerCtrl._hasWeapon)
+            {
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 1);
+                _animator.SetTrigger("KickWithWeapon");
+                yield return new WaitForSeconds(0.9f);
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 0);
+                _isAttacking = false;
+            }
+            else
+            {
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 1);
+                _animator.SetTrigger("Kick");
+                yield return new WaitForSeconds(0.9f);
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 0);
+                _isAttacking = false;
+            }
+            
+            _playerCtrl._rightFoot.GetComponent<CapsuleCollider>().enabled = false;
         }
     
         private void HandleIdle()
@@ -115,6 +165,7 @@ namespace Player
     
             _verticalVelocity = _jumpForce;
             var direction = new Vector3(0f, _jumpForce, 0f).normalized;
+            _animator.SetTrigger("Jump");
                 
             _controller.Move(direction * _speed * Time.deltaTime);
         }
