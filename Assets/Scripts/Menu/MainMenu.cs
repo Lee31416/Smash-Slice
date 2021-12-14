@@ -5,11 +5,16 @@ namespace Menu
 {
     public class MainMenu : MonoBehaviour
     {
-        public void PlayGame()
-        {   
-            print("test");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        public void StartMulti()
+        {
+            SceneManager.LoadScene("Lobby");
         }
+
+        public void StartSingle()
+        {
+            SceneManager.LoadScene("SinglePlayer");
+        }
+        
         public void QuitGame() 
         {
             Application.Quit();    

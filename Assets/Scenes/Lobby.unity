@@ -431,13 +431,13 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 666819959952757811, guid: 848442d35acc35246b1e6d7c91cdd641, type: 3}
   autoCreatePlayer: 1
-  playerSpawnMethod: 0
+  playerSpawnMethod: 1
   spawnPrefabs: []
   showRoomGUI: 1
   minPlayers: 1
-  roomPlayerPrefab: {fileID: 0}
+  roomPlayerPrefab: {fileID: 114033720796874720, guid: 94bab2153fd48bc48b31eb7b60ceebb0, type: 3}
   RoomScene: Assets/Scenes/Room.unity
-  GameplayScene: Assets/Scenes/Game.unity
+  GameplayScene: Assets/Scenes/Multiplayer.unity
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
