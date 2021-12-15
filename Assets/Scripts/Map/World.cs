@@ -10,7 +10,7 @@ namespace Map
     
         [SerializeField] private int seed;
         [SerializeField] private BiomeAttributes biome;
-        [SerializeField] private Transform player;
+        [SerializeField] public Transform player;
         [SerializeField] private Vector3 spawnPosition;
         
         public Material material;
@@ -23,8 +23,8 @@ namespace Map
         private bool _isCreatingChunks;
         private List<ChunkCoord> _chunksToCreate = new List<ChunkCoord>();
         private BoxCollider _worldCollider;
-    
-        private void Awake() 
+
+        public void InitMap()
         {
             Random.InitState(seed);
 
@@ -47,8 +47,9 @@ namespace Map
             return _playerChunkCoord;
         }
     
-        private void Update() 
+        private void Update()
         {
+            if (player == null) return;
             UpdateChunks(player.transform);
         }
     

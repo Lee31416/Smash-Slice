@@ -1,21 +1,19 @@
 using Cinemachine;
 using Menu;
+using Mirror;
 using TMPro;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : NetworkBehaviour
     {
-        [Header("Prefabs")]
-        [SerializeField] private GameObject _cameraPrefab;
-        
         [Header("GameObjects")]
         [SerializeField] public GameObject _rightHand;
         [SerializeField] public GameObject _rightFoot;
         [SerializeField] private HealthBar _healthBar;
-        [SerializeField] private DebugScreen _debugScreen;
-        [SerializeField] private TextMeshProUGUI _coinText;
+        [SerializeField] public DebugScreen _debugScreen;
+        [SerializeField] public TextMeshProUGUI _coinText;
 
         [Header("Presets")]
         [SerializeField] private float _pickupRange;
@@ -26,34 +24,39 @@ namespace Player
     
         private GameObject _equippedWeapon;
         public bool _hasWeapon { get; private set; }
-        private CinemachineFreeLook _cameraControl;
         private PlayerMovement _movement;
-        private int coinAmount = 0;
+        public int coinAmount { get; private set; }
+        
+        [SyncVar]
         private int currentHealth;
-        private bool _isAlive = true;
+        
+        [field : SyncVar]
+        public bool _isAlive { get; private set; }
         public bool _isAttacking { get; private set; }
         
         private void Awake()
         {
             _movement = GetComponent<PlayerMovement>();
-            _cameraControl = Instantiate(_cameraPrefab).GetComponent<CinemachineFreeLook>();
-            _cameraControl.m_Follow = gameObject.transform;
-            _cameraControl.m_LookAt = gameObject.transform;
             currentHealth = maxHealth;
             _healthBar.SetMaxHealth(maxHealth);
         }
     
         private void Update()
         {
+            if (!isLocalPlayer) return;
+            
             _isAlive = currentHealth > 0;
             _movement._animator.SetBool("IsAlive", _isAlive);
+            if (!_isAlive)
+            {
+                _movement._animator.SetTrigger("Die");
+            }
             if (!_isAlive) return;
 
             _isAttacking = _movement._isAttacking;
             _hasWeapon = _equippedWeapon != null;
             _movement._animator.SetBool("HasWeapon", _hasWeapon);
             _healthBar.SetHealth(currentHealth);
-            _coinText.text = coinAmount.ToString();
             
             if (Input.GetKeyDown(KeyCode.E) && !_hasWeapon)
             {
@@ -114,6 +117,7 @@ namespace Player
         {
             currentHealth -= dmg;
             if (currentHealth <= 0) currentHealth = 0;
+            _movement._animator.SetTrigger("Hurt");
         }
         
         private void OnDrawGizmosSelected()

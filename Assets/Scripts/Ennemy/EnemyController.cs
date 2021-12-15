@@ -1,12 +1,14 @@
 using System.Collections;
+using Mirror;
 using UnityEngine;
 
 namespace Ennemy
 {
-    public class EnemyController : MonoBehaviour
+    public class EnemyController : NetworkBehaviour
     {
         [Header("Prefabs")]
         [SerializeField] private GameObject _coinPrefab;
+        [SerializeField] private GameObject _greatSwordPrefab;
         
         [Header("References")]
         [SerializeField] private HealthBar _healthBar;
@@ -49,14 +51,24 @@ namespace Ennemy
         {
             FindTarget();
             
+            
             if (_target == null) return;
             var distance = Vector3.Distance(_target.position, transform.position);
     
-            if (distance >= _detectionRange) return; // TODO check ca
+            if (distance >= _detectionRange) return;
             FaceTarget();
-    
+            if (distance < 3)
+            {
+                AttackTarget();
+            }
+            
             if (distance < 3) return;
             MoveToTarget(distance);
+        }
+
+        private void AttackTarget()
+        {
+           _movement._animator.SetTrigger("Attack");
         }
 
         private void HandleKnockBack()
@@ -80,17 +92,21 @@ namespace Ennemy
 
         private void GenerateLoot()
         {
-            var rdmNumber = Random.Range(0, 100);
-
-            StartCoroutine(GenerateCash());
+            StartCoroutine(WaitForSeconds(2));
 
             _droppedLoot = true;
         }
 
-        private IEnumerator GenerateCash()
+        private IEnumerator WaitForSeconds(int seconds)
         {
-            yield return new WaitForSeconds(2);
-            
+            yield return new WaitForSeconds(seconds); 
+            CmdGenerateMoney();
+            CmdGenerateWeapon();
+        }
+
+        [Command]
+        private void CmdGenerateMoney()
+        {
             for (var i = 0; i < _cashDropChance / 2; i++)
             {
                 var rdmNumber = Random.Range(0, 100);
@@ -98,8 +114,24 @@ namespace Ennemy
                 if (rdmNumber % 2 != 0) continue;
                 var vect = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
                 var coinInstance = Instantiate(_coinPrefab, vect, Quaternion.identity);
+                NetworkServer.Spawn(coinInstance);
                 var rdmForce = Random.Range(500, 750);
                 coinInstance.GetComponent<Rigidbody>().AddForce(transform.up * rdmForce);
+            }
+        }
+
+        [Command]
+        private void CmdGenerateWeapon()
+        {
+            var rdm = Random.Range(0, 100);
+
+            if ((rdm + _lootChance) > 75)
+            {
+                var vect = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
+                var weaponInstance = Instantiate(_greatSwordPrefab, vect, Quaternion.identity);
+                NetworkServer.Spawn(weaponInstance);
+                var rdmForce = Random.Range(500, 750);
+                weaponInstance.GetComponent<Rigidbody>().AddForce(transform.up * rdmForce);
             }
         }
 
@@ -138,6 +170,7 @@ namespace Ennemy
         {
             currentHealth -= dmg;
             if (currentHealth <= 0) currentHealth = 0;
+            _movement._animator.SetTrigger("Hurt");
         }
 
         public void TakeKick()

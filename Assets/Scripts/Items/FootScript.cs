@@ -9,9 +9,7 @@ public class FootScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!_player._isAttacking) return;
-        print("kicked : " + other.name);
         var target = other.gameObject;
-
         if (!target.CompareTag("Ennemy")) return;
         
         var controller = target.GetComponent<EnemyController>();

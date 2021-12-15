@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d80f562ecf10b774c89bd851c792d211
+guid: 2b1911dd6d48270408d3715750a67062
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: drububu_comMat
-    second: {fileID: 2100000, guid: d8bcd3bce05276a4793aadc1cf5d5566, type: 2}
+      name: ModelMat
+    second: {fileID: 2100000, guid: c3fa3ef523733d34496902a6c959c389, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

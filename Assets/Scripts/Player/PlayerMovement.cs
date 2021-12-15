@@ -1,9 +1,10 @@
 using System.Collections;
+using Mirror;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovement : NetworkBehaviour
     {
         [SerializeField] private CharacterController _controller;
         [SerializeField] private PlayerController _playerCtrl;
@@ -17,16 +18,21 @@ namespace Player
         private bool _isGrounded;
         private bool _isRunning;
         private bool _isMoving;
+        private bool _isAlive;
         public Animator _animator { get; private set; }
         public bool _isAttacking { get; private set; }
     
-        private void Awake()
+        private void Start()
         {
             _animator = GetComponentInChildren<Animator>();
         }
     
         private void Update()
         {
+            if (!isLocalPlayer) return;
+            _isAlive = _playerCtrl._isAlive;
+            if (!_isAlive) return;
+            
             _isMoving = _controller.velocity.x != 0 || _controller.velocity.y != 0 || _controller.velocity.z != 0;
             _isGrounded = _controller.isGrounded;
             _animator.SetBool("IsRunning", _isRunning);
@@ -41,6 +47,9 @@ namespace Player
 
         private void FixedUpdate()
         {
+            if (!isLocalPlayer) return;
+            if (!_isAlive) return;
+            
             HandleJumpWithGravity();
             HandleMove();
             HandleIdle();
@@ -67,18 +76,14 @@ namespace Player
         {
             if (_playerCtrl._hasWeapon)
             {
-                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 1);
                 _animator.SetTrigger("Attack");
                 yield return new WaitForSeconds(0.9f);
-                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 0);
                 _isAttacking = false;
             }
             else
             {
-                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 1);
                 _animator.SetTrigger("Punch");
                 yield return new WaitForSeconds(0.9f);
-                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 0);
                 _isAttacking = false;
             }
             
@@ -89,18 +94,14 @@ namespace Player
         {
             if (_playerCtrl._hasWeapon)
             {
-                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 1);
                 _animator.SetTrigger("KickWithWeapon");
                 yield return new WaitForSeconds(0.9f);
-                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 0);
                 _isAttacking = false;
             }
             else
             {
-                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 1);
                 _animator.SetTrigger("Kick");
                 yield return new WaitForSeconds(0.9f);
-                _animator.SetLayerWeight(_animator.GetLayerIndex("Attack Layer"), 0);
                 _isAttacking = false;
             }
             

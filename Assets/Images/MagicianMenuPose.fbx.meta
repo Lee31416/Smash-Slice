@@ -1,14 +1,12 @@
 fileFormatVersion: 2
-guid: d80f562ecf10b774c89bd851c792d211
+guid: d86a39a5998248e408c79b71d6c6c934
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable: []
-  externalObjects:
+  internalIDToNameTable:
   - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: drububu_comMat
-    second: {fileID: 2100000, guid: d8bcd3bce05276a4793aadc1cf5d5566, type: 2}
+      74: -203655887218126122
+    second: mixamo.com
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using Player;
 using UnityEngine;
 
 namespace Gameplay
 {
-    public class GameManagerScript : MonoBehaviour
+    public class GameManagerScript : NetworkBehaviour
     {
         [SerializeField] private GameObject ennemyPrefab;
-        [SerializeField] private PlayerController _player;
         [SerializeField] private float _enemySpawnChance = 25f;
         [SerializeField] private int _enemySpawnInterval = 5;
         [SerializeField] private int _enemySpawnRange = 10;
@@ -16,6 +16,8 @@ namespace Gameplay
         private List<GameObject> enemies = new List<GameObject>();
         private List<GameObject> enemiesToRemove = new List<GameObject>();
         private bool _isSpawningEnnemies;
+        public PlayerController _player;
+
     
         private void Start()
         {
@@ -24,8 +26,16 @@ namespace Gameplay
     
         private void FixedUpdate()
         {
-            StartCoroutine(SpawnEnemy());
-    
+            if (_player == null) return;
+            if (!_player._isAlive) return;
+            
+            StartCoroutine(WaitForIntervalBeforeSpawningEnemies());
+
+            CleanEnemiesThatAreTooFar();
+        }
+
+        private void CleanEnemiesThatAreTooFar()
+        {
             foreach (var enemy in enemies)
             {
                 var posXDiff = enemy.transform.position.x - _player.transform.position.x;
@@ -48,13 +58,13 @@ namespace Gameplay
             foreach (var enemy in enemiesToRemove)
             {
                 enemies.Remove(enemy);
-                Destroy(enemy);
+                NetworkServer.Destroy(enemy);
             }
             
             enemiesToRemove.Clear();
         }
         
-        private IEnumerator SpawnEnemy()
+        private IEnumerator WaitForIntervalBeforeSpawningEnemies()
         {
             if (_isSpawningEnnemies) yield break;
     
@@ -63,9 +73,15 @@ namespace Gameplay
             yield return new WaitForSeconds(_enemySpawnInterval);
             
             _isSpawningEnnemies = false;
-    
+
+            CmdSpawnEnnemy();
+        }
+        
+        [Command(requiresAuthority = false)]
+        private void CmdSpawnEnnemy()
+        {
             var rdmNumber = Random.Range(0, 100);
-            if (rdmNumber > _enemySpawnChance) yield break;
+            if (rdmNumber > _enemySpawnChance) return;
     
             var playerX = _player.transform.position.x;
             var playerZ = _player.transform.position.z;
@@ -78,11 +94,14 @@ namespace Gameplay
             var spawnPos = new Vector3(playerX - randomX, 80, playerZ - randomZ);
     
             var enemy = Instantiate(ennemyPrefab, spawnPos, Quaternion.identity);
+            NetworkServer.Spawn(enemy);
             enemies.Add(enemy);
         }
         
         private void OnDrawGizmosSelected()
         {
+            if (_player == null) return;
+            
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(_player.transform.position, new Vector3(_enemySpawnRange, 2, _enemySpawnRange));
         }

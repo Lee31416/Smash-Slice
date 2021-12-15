@@ -94,6 +94,31 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!135 &7201390011911411823
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148991327009}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 7.280746
+  m_Center: {x: -57.8, y: 37, z: -0.2}
+--- !u!114 &2352673220517548650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148991327009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7672e9f11d49776438b2b72a71d088bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2105229239998982024
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,6 +498,7 @@ GameObject:
   - component: {fileID: 8306351528093866232}
   - component: {fileID: 8306351528093866235}
   - component: {fileID: 8306351528093866233}
+  - component: {fileID: -3145166516171052497}
   m_Layer: 0
   m_Name: Ennemy
   m_TagString: Ennemy
@@ -523,6 +549,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f065068cf446f34ea1e1c6a98ef326e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   _coinPrefab: {fileID: 588352241257891984, guid: 0d2bf62e66c11c648a233cb75b408704, type: 3}
   _healthBar: {fileID: 4721346764153919983}
   _controller: {fileID: 8306351528093866233}
@@ -549,6 +577,23 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 2.64, z: 0}
+--- !u!114 &-3145166516171052497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8306351528093866239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 41debb62808d0504f91df1bcd286df24
+  hasSpawned: 0
 --- !u!1001 &1045022320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -630,6 +675,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d80f562ecf10b774c89bd851c792d211, type: 3}
+--- !u!1 &919132148991327009 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d80f562ecf10b774c89bd851c792d211, type: 3}
+  m_PrefabInstance: {fileID: 1045022320}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1305136721
 PrefabInstance:
   m_ObjectHideFlags: 0

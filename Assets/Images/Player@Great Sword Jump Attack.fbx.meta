@@ -1,14 +1,12 @@
 fileFormatVersion: 2
-guid: e5280e3de083cb2408e645b4b1bd2c4f
+guid: 13ccb2748e40b52428cbc1fe8aca2d01
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable: []
-  externalObjects:
+  internalIDToNameTable:
   - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: ModelMat
-    second: {fileID: 2100000, guid: c3fa3ef523733d34496902a6c959c389, type: 2}
+      74: -203655887218126122
+    second: mixamo.com
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

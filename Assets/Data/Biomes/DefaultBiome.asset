@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 604863bef2f81714b90b56811bb2841f, type: 3}
-  m_Name: BiomeMulti
+  m_Script: {fileID: 11500000, guid: 6ea29fcebd1244408439e689471d98cd, type: 3}
+  m_Name: DefaultBiome
   m_EditorClassIdentifier: 
   biomeName: Default
   solidGroundHeight: 42
@@ -24,10 +24,3 @@ MonoBehaviour:
     scale: 0.1
     threshold: 0.5
     noiseOffset: 0
-  - nodeName: Sand
-    blockID: 4
-    minHeight: 30
-    maxHeight: 128
-    scale: 0.2
-    threshold: 0.6
-    noiseOffset: 500

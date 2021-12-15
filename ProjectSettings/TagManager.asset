@@ -7,6 +7,9 @@ TagManager:
   - Coin
   - Weapon
   - Ennemy
+  - World
+  - PlayerCanvas
+  - GameManager
   layers:
   - Default
   - TransparentFX

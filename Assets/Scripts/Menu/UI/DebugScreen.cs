@@ -7,7 +7,7 @@ namespace Menu
     public class DebugScreen : MonoBehaviour 
     {
         [SerializeField] private Text text;
-        [SerializeField] private Transform _player;
+        public Transform _player;
     
         private float _frameRate;
         private float _timer;
