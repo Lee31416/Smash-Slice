@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 5185863779551127727}
   - component: {fileID: 5735232681012012110}
   - component: {fileID: -907259540482857583}
+  - component: {fileID: 9100242655165681876}
   m_Layer: 6
   m_Name: GreatSword
   m_TagString: Weapon
@@ -174,3 +175,17 @@ MonoBehaviour:
   visible: 0
   m_AssetId: e27ee000f2684a64695248f2bacdbdd1
   hasSpawned: 0
+--- !u!136 &9100242655165681876
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6415456056942540512}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.554148
+  m_Height: 22.04797
+  m_Direction: 0
+  m_Center: {x: 4.882804, y: -0.04767552, z: 0.0520318}

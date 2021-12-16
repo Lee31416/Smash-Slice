@@ -9,6 +9,7 @@ namespace Ennemy
         [Header("Prefabs")]
         [SerializeField] private GameObject _coinPrefab;
         [SerializeField] private GameObject _greatSwordPrefab;
+        [SerializeField] private GameObject _heartPrefab;
         
         [Header("References")]
         [SerializeField] private HealthBar _healthBar;
@@ -40,7 +41,11 @@ namespace Ennemy
         {
             _healthBar.SetHealth(currentHealth);
             HandleDeath();
-            
+
+            if (!_isAlive)
+            {
+                StartCoroutine(WaitForSecondsBeforeRemovingCadaver(3));
+            }
             if (!_isAlive) return;
             
             HandleKnockBack();
@@ -92,46 +97,56 @@ namespace Ennemy
 
         private void GenerateLoot()
         {
-            StartCoroutine(WaitForSeconds(2));
+            if (!isServer) return;
+            
+            StartCoroutine(WaitForSecondsBeforeGenloot(2));
 
             _droppedLoot = true;
         }
 
-        private IEnumerator WaitForSeconds(int seconds)
+        private IEnumerator WaitForSecondsBeforeRemovingCadaver(int seconds)
         {
             yield return new WaitForSeconds(seconds); 
-            CmdGenerateMoney();
+            
+            NetworkServer.Destroy(gameObject);
+        }
+        
+        private IEnumerator WaitForSecondsBeforeGenloot(int seconds)
+        {
+            yield return new WaitForSeconds(seconds); 
+            CmdGenerateMoneyAndHeart();
             CmdGenerateWeapon();
         }
 
-        [Command]
-        private void CmdGenerateMoney()
+        [Command(requiresAuthority = false)]
+        private void CmdGenerateMoneyAndHeart()
         {
             for (var i = 0; i < _cashDropChance / 2; i++)
             {
                 var rdmNumber = Random.Range(0, 100);
 
                 if (rdmNumber % 2 != 0) continue;
-                var vect = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
+                var vect = new Vector3(transform.position.x, transform.position.y + 3, transform.position.z);
                 var coinInstance = Instantiate(_coinPrefab, vect, Quaternion.identity);
                 NetworkServer.Spawn(coinInstance);
-                var rdmForce = Random.Range(500, 750);
-                coinInstance.GetComponent<Rigidbody>().AddForce(transform.up * rdmForce);
+                
             }
+            
+            var vectHeart = new Vector3(transform.position.x, transform.position.y + 3, transform.position.z);
+            var heartInstance =  Instantiate(_heartPrefab, vectHeart, Quaternion.identity);
+            NetworkServer.Spawn(heartInstance);
         }
 
-        [Command]
+        [Command(requiresAuthority = false)]
         private void CmdGenerateWeapon()
         {
             var rdm = Random.Range(0, 100);
 
             if ((rdm + _lootChance) > 75)
             {
-                var vect = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
+                var vect = new Vector3(transform.position.x, transform.position.y + 3, transform.position.z);
                 var weaponInstance = Instantiate(_greatSwordPrefab, vect, Quaternion.identity);
                 NetworkServer.Spawn(weaponInstance);
-                var rdmForce = Random.Range(500, 750);
-                weaponInstance.GetComponent<Rigidbody>().AddForce(transform.up * rdmForce);
             }
         }
 
@@ -168,6 +183,8 @@ namespace Ennemy
     
         public void TakeDamage(int dmg)
         {
+            if (!_isAlive) return;
+            
             currentHealth -= dmg;
             if (currentHealth <= 0) currentHealth = 0;
             _movement._animator.SetTrigger("Hurt");

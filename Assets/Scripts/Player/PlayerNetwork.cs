@@ -34,14 +34,10 @@ public class PlayerNetwork : NetworkBehaviour
             _cameraControl.m_LookAt = gameObject.transform;
             _world = GameObject.FindWithTag("World").GetComponent<World>();
             _gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManagerScript>();
-            print(_gameManager);
             _world.player = gameObject.transform;
             _gameManager._player = gameObject.GetComponent<PlayerController>();
-            //_debugScreen = GameObject.FindWithTag("PlayerCanvas").GetComponentInChildren<DebugScreen>();
+            
             _coinText = GameObject.FindWithTag("PlayerCanvas").GetComponentInChildren<TextMeshProUGUI>();
-
-            //_debugScreen._player = gameObject.transform;
-            //_player._debugScreen = _debugScreen;
             _player._coinText = _coinText;
             
             _world.InitMap();

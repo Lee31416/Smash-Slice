@@ -10,6 +10,8 @@ TagManager:
   - World
   - PlayerCanvas
   - GameManager
+  - DeathScreen
+  - Heart
   layers:
   - Default
   - TransparentFX

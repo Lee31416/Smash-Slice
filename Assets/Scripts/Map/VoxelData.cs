@@ -8,8 +8,8 @@ namespace Map
     {
     	public const int k_ChunkWidth = 16;
     	public const int k_ChunkHeight = 128;
-    	public const int k_WorldSizeInChunks = 20;
-    	public const int k_ViewDistanceInChunks = 5;
+    	public const int k_WorldSizeInChunks = 32;
+    	public const int k_ViewDistanceInChunks = 8;
     	public const int k_TextureAtlasSizeInBlocks = 4;
     	public static float NormalizedBlockTextureSize => 1f / k_TextureAtlasSizeInBlocks;
     	public static int WorldSizeInVoxels => k_WorldSizeInChunks * k_ChunkWidth;

@@ -14,6 +14,7 @@ namespace Player
         [SerializeField] private HealthBar _healthBar;
         [SerializeField] public DebugScreen _debugScreen;
         [SerializeField] public TextMeshProUGUI _coinText;
+        public GameObject _deathScreen;
 
         [Header("Presets")]
         [SerializeField] private float _pickupRange;
@@ -34,11 +35,17 @@ namespace Player
         public bool _isAlive { get; private set; }
         public bool _isAttacking { get; private set; }
         
-        private void Awake()
+        private void Start()
         {
+            if (!isLocalPlayer) return;
+            
             _movement = GetComponent<PlayerMovement>();
             currentHealth = maxHealth;
             _healthBar.SetMaxHealth(maxHealth);
+            _deathScreen = GameObject.Find("DeathScreen");
+            _debugScreen = GameObject.FindWithTag("PlayerCanvas").GetComponentInChildren<DebugScreen>();
+            _debugScreen._player = transform;
+            _debugScreen.gameObject.SetActive(!_debugScreen.gameObject.activeSelf);
         }
     
         private void Update()
@@ -50,15 +57,18 @@ namespace Player
             if (!_isAlive)
             {
                 _movement._animator.SetTrigger("Die");
+                if (_deathScreen != null) _deathScreen.gameObject.SetActive(true);
             }
+           
             if (!_isAlive) return;
 
             _isAttacking = _movement._isAttacking;
             _hasWeapon = _equippedWeapon != null;
             _movement._animator.SetBool("HasWeapon", _hasWeapon);
             _healthBar.SetHealth(currentHealth);
+            if (_deathScreen != null) _deathScreen.gameObject.SetActive(false);
             
-            if (Input.GetKeyDown(KeyCode.E) && !_hasWeapon)
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 PickItem();
             }
@@ -71,6 +81,44 @@ namespace Player
             if (Input.GetKeyDown(KeyCode.F3))
             {
                 _debugScreen.gameObject.SetActive(!_debugScreen.gameObject.activeSelf);
+            }
+            
+            /*if (Input.GetKeyDown(KeyCode.X))
+            {
+                RevivePlayer();
+            }*/
+
+            _coinText.text = coinAmount.ToString();
+            
+            CheckForDownedPlayers();
+        }
+
+        private void CheckForDownedPlayers()
+        {
+            /*var revivablePlayer = Physics.OverlapBox(transform.position, new Vector3(_pickupRange, 2, _pickupRange), Quaternion.identity);
+            
+            if (revivablePlayer.Length > 0)
+            {
+                print("Can revive someone");
+            }*/
+            
+            // TODO WIP
+        }
+
+        private void RevivePlayer()
+        {
+            var revivablePlayer = Physics.OverlapBox(transform.position, new Vector3(_pickupRange, 2, _pickupRange), Quaternion.identity);
+
+            foreach (var player in revivablePlayer)
+            {
+                if (player.tag != "Player") return;
+
+                var controller = player.GetComponent<PlayerController>();
+                if (controller._isAlive) return;
+                if (coinAmount < 25) return;
+
+                controller.currentHealth = 50;
+                coinAmount -= 25;
             }
         }
     
@@ -90,30 +138,50 @@ namespace Player
             {
                 var pickedItem = item.gameObject;
 
-                if (pickedItem.tag == "Coin")
+                switch (pickedItem.tag)
                 {
-                    coinAmount++;
-                    Destroy(pickedItem.gameObject);
-                }
-                
-                if (pickedItem.tag == "Weapon")
-                {
-                    var weaponScript = pickedItem.GetComponent<WeaponScript>();
-                    _equippedWeapon = pickedItem;
-                    print("just picked up : " + _equippedWeapon.name);
+                    case "Coin":
+                    {
+                        coinAmount++;
+                        NetworkServer.Destroy(pickedItem.gameObject);
+                        break; 
+                    }
+                    case "Heart":
+                    {
+                        currentHealth += 15;
+                        if (currentHealth > maxHealth) currentHealth = maxHealth;
+                        NetworkServer.Destroy(pickedItem.gameObject);
+                        break;
+                    }
+                    case "Weapon" when !_hasWeapon:
+                    {
+                        _equippedWeapon = pickedItem;
+                        _equippedWeapon.GetComponent<BoxCollider>().enabled = false;
+                        print("just picked up : " + _equippedWeapon.name);
+                        break;
+                    }
                 }
             }
 
             if (_equippedWeapon != null)
             {
+                _equippedWeapon.GetComponent<BoxCollider>().enabled = true;
                 _equippedWeapon.GetComponent<Rigidbody>().isKinematic = true;
                 _equippedWeapon.transform.parent = _rightHand.transform;
                 _equippedWeapon.transform.localPosition = _equippedWeaponPosition;
                 _equippedWeapon.transform.localEulerAngles = _equippedWeaponRotation;
             }
         }
-        
-        public void TakeDamage(int dmg)
+
+        [Command]
+        public void CmdTakeDamage(int dmg)
+        {
+            if (!isServer) return;
+            TakeDamage(dmg);
+        }
+
+        [ClientRpc]
+        private void TakeDamage(int dmg)
         {
             currentHealth -= dmg;
             if (currentHealth <= 0) currentHealth = 0;

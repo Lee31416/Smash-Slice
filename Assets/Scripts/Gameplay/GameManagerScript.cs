@@ -38,6 +38,8 @@ namespace Gameplay
         {
             foreach (var enemy in enemies)
             {
+                if (enemy == null) continue;
+                
                 var posXDiff = enemy.transform.position.x - _player.transform.position.x;
                 if (posXDiff < 0)
                 {

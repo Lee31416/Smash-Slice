@@ -6,7 +6,87 @@ ModelImporter:
   - first:
       74: -4791504522942941401
     second: Armature|Armature|mixamo.com|Layer0
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_0_L_Calf_palette1
+    second: {fileID: 2100000, guid: 7131f889f6f635d4c9301279bff97da5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_10_R_ForeArm_1_palette1
+    second: {fileID: 2100000, guid: d218e1f7d06394a428c31736b1b97144, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_11_L_Hand_palette1
+    second: {fileID: 2100000, guid: d8aead6af9760f644be7d2ab97a59818, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_12_L_Arm_palette1
+    second: {fileID: 2100000, guid: 26574d10f2d86e749a029c5b865b828a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_13_L_ForeArm_palette1
+    second: {fileID: 2100000, guid: 1590064d101c17944a6e222bfdb69e09, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_14_R_Thigh_9_palette1
+    second: {fileID: 2100000, guid: 8de43530ec0c00447aafa182b4526c47, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_15_Head_9_palette1
+    second: {fileID: 2100000, guid: 2dad37eac29821941baf2e445f0f4ea4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_1_L_Thigh_palette1
+    second: {fileID: 2100000, guid: cb746b46681e6254f82d05ee9779108d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_2_L_Foot_palette1
+    second: {fileID: 2100000, guid: b2427ada14800ef49aa3d88ce522db49, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_3_R_Foot_palette1
+    second: {fileID: 2100000, guid: 32d17ec22da56fe4899c754beb4cd73b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_4_R_Calf_palette1
+    second: {fileID: 2100000, guid: 2ec01a301bab1c844971270198d7c88a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_5_Spine1_palette1
+    second: {fileID: 2100000, guid: 30b725cd4f6cabb4b87afcf1be3a5c7c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_6_Spine2_1_palette1
+    second: {fileID: 2100000, guid: 818cf35bc0777ec4686c8404dc6a24c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_7_Spine3_palette1
+    second: {fileID: 2100000, guid: 0459009c25596c347a43bbdd5a7d2f5f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_8_R_Hand_palette1
+    second: {fileID: 2100000, guid: 1eb846d726c56b446ad8d7d404e7014a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_9_R_Arm_1_palette1
+    second: {fileID: 2100000, guid: 7b3d9c6883144614db812a8c027614ef, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Ennemy;
+using Mirror;
 using Player;
 using UnityEngine;
 
@@ -11,6 +12,6 @@ public class StaffScript : MonoBehaviour
         var target = other.gameObject;
         if (!target.CompareTag("Player")) return;
         var controller = target.GetComponent<PlayerController>();
-        controller.TakeDamage(10);
+        controller.CmdTakeDamage(10);
     }
 }

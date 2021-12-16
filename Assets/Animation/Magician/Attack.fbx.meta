@@ -6,7 +6,17 @@ ModelImporter:
   - first:
       74: -4791504522942941401
     second: AttackAnim
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_0_L_Calf_palette1
+    second: {fileID: -3628631174766079966, guid: 476fa96316434ef4688ea0eb3e34e067, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_10_R_ForeArm_1_palette1
+    second: {fileID: -6405426720850664283, guid: 476fa96316434ef4688ea0eb3e34e067, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
